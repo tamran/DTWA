@@ -19,9 +19,9 @@ import imageio
 
 # DTWA GENERAL HELPERS ##############################################################################################
 
-# generates nt initial configurations = # of trajectories for the DTWA with all spins pointing in the direction given by axis
+# generates nt initial configurations (= # of DTWA trajectories) with all spins pointing in the same direction (x,y, or z)
 # returns a matrix of dimension nt x N x 3 where the rows = number of init conditions/rajectories, col = each spin, page = vals of spin component
-def genInitConfigs(N,nt,axis="x"):    
+def genUniformConfigs(N,nt,axis="x"):    
     if axis=="x":
         return np.array([np.concatenate(((1/2)*np.ones((N,1)),np.random.randint(0,2,size=(N,2))-(1/2)),axis=1) for i in range(nt)])
     elif axis=="y":
@@ -195,7 +195,7 @@ def getSsqExpect(dist,axis='z'):
     
 # search for minimum squeezing parameter, aka best squeezing, within tvec given some distribution of individual spins
 def getDTWASqueezingParam(N,nt,tvec,Jz,coord=[],Jfunc=[],alpha=[]):
-    initConfigs = genInitConfigs(N,nt,axis='x')
+    initConfigs = genUniformConfigs(N,nt,axis='x')
     tdist, meanConfig_evol = IsingEvolve(initConfigs,tvec,Jz,coord=coord,Jfunc=Jfunc,alpha=alpha)  # tdist is the distribution at time t
 
     W_dtwa = np.array([getW(dist) for dist in tdist])
